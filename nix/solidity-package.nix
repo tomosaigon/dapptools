@@ -1,4 +1,4 @@
-{ pkgs }: let
+{ pkgs, test-hevm ? pkgs.hevm }: let
   remappings = xs:
     builtins.foldl' pkgs.lib.mergeAttrs {}
       (builtins.map
@@ -20,7 +20,7 @@ in
     , extract ? true
     , deps ? []
     , solc ? pkgs.solc
-    , test-hevm ? pkgs.dapp2.test-hevm
+    , inherit test-hevm;
     , hevm ? pkgs.hevm
     , solcFlags ? ""
     , flatten ? false
