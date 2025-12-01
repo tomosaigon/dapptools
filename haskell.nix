@@ -38,7 +38,16 @@ in self-hs: super-hs:
 
     # This package is somewhat unmaintained and doesn't compile with GHC 8.4,
     # so we have to use a GitHub fork that fixes it.
-    semver-range = super-hs.semver-range;
+    # semver-range = super-hs.semver-range;
+    # semver-range:
+    # Upstream nixpkgs and/or old overrides try to fetch a GitHub tag
+    # "patch-1" that no longer exists. Pin it to the Hackage tarball instead.
+    semver-range = super-hs.semver-range.overrideAttrs (attrs: {
+      src = pkgs.fetchurl {
+        url = "https://hackage.haskell.org/package/semver-range-0.2.8/semver-range-0.2.8.tar.gz";
+        sha256 = "1df663zkcf7y7a8cf5llf111rx4bsflhsi3fr1f840y4kdgxlvkf";
+      };
+    });
 
     # hevm: built from ./src/hevm, no docs, no tests (legacy solc),
     # then wrapped with extra tools on PATH.
