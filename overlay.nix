@@ -25,6 +25,9 @@ in rec {
 
   solidityPackage = import ./nix/solidity-package.nix {
     inherit (self) pkgs;
+
+    # Avoid touching pkgs.dapp2 entirely – use hevm directly for tests
+    test-hevm = self.hevm;
   };
 
   # experimental dapp builder, allows for easy overriding of phases
