@@ -40,16 +40,17 @@ in self-hs: super-hs:
     # so we have to use a GitHub fork that fixes it.
     semver-range = super-hs.semver-range;
 
-    hevm = pkgs.haskell.lib.dontHaddock ((
-      self-hs.callCabal2nix "hevm" (./src/hevm) {
-        # Haskell libs with the same names as C libs...
-        # Depend on the C libs, not the Haskell libs.
-        # These are system deps, not Cabal deps.
-        inherit (pkgs) secp256k1;
+    hevm = pkgs.haskell.lib.dontCheck (
+        pkgs.haskell.lib.dontHaddock ((
+          self-hs.callCabal2nix "hevm" (./src/hevm) {
+            # Haskell libs with the same names as C libs...
+            # Depend on the C libs, not the Haskell libs.
+            # These are system deps, not Cabal deps.
+            inherit (pkgs) secp256k1;
 
-        ff = pkgs.libff;
-      }
-    ).overrideAttrs (attrs: {
+            ff = pkgs.libff;
+          }
+    )).overrideAttrs (attrs: {
       postInstall = ''
         wrapProgram $out/bin/hevm --prefix PATH \
           : "${lib.makeBinPath (with pkgs; [bash coreutils git solc])}"
