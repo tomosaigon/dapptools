@@ -20,7 +20,7 @@ in
     , extract ? true
     , deps ? []
     , solc ? pkgs.solc
-    , inherit test-hevm;
+    , test-hevm ? pkgs.hevm
     , hevm ? pkgs.hevm
     , solcFlags ? ""
     , flatten ? false
